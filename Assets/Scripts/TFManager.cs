@@ -11,11 +11,16 @@ public class TFManager : MonoBehaviour
  private GameObject bodyObj;
  [SerializeField]
  private GameObject faceObj;
+ [SerializeField]
+ private Transform anim2;
  [SerializeField] Animator anim;
+ [SerializeField]
+ private Vector3 muzzStart, muzzEnd;
     void Start()
     {
 	    bodyRenderer = bodyObj.GetComponent<Renderer>();
 	    faceRenderer = faceObj.GetComponent<Renderer>();
+	    anim2.DOScale(muzzStart, 0.0f);
     }
 
 	public void changeBodyState(float stage)
@@ -57,9 +62,11 @@ public class TFManager : MonoBehaviour
 			//antlers
 		case 2:
 			anim.Play("muzzlegrow");
+			anim2.DOScale(muzzEnd, 2.6f);
 			break;
 		case 3:
 			anim.Play("muzzleoff");
+			anim2.DOScale(muzzStart, 0.0f);
 			anim.Play("earsoff");
 			anim.Play("antlersoff");
 			break;
