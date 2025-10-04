@@ -34,6 +34,7 @@ public class TextManager : MonoBehaviour
 		mySequence1.Insert(3, textBG.DOFade(1.0f, 2.0f));
 		mySequence1.PrependInterval(1);
 		nextDelay = 0.0f;
+		outside.volume = 0.7f;
     }
 
     void Update()
@@ -73,8 +74,9 @@ public class TextManager : MonoBehaviour
 			Invoke("TextSet", 9);
 			inside.Play();
 			outside.DOFade(0.0f, 4.0f);
-			inside.DOFade(1.0f, 4.0f);
+			inside.DOFade(0.7f, 4.0f);
 			//play door creak sfx
+			door.volume = 0.6f;
 			door.PlayDelayed(6);
 			Sequence mySequence = DOTween.Sequence();
 			mySequence.Append(blackoutAll.DOFade(1.0f, 4.0f));
@@ -266,6 +268,7 @@ public class TextManager : MonoBehaviour
 			textToChange =  "";
 			nameToChange =  "";
 			parade.PlayDelayed(6);
+			parade.volume = 0.6f;
 			inside.DOFade(0.0f, 5.0f);
 			Invoke("TextSet", 6);
 			textBG.enabled = false;
@@ -309,7 +312,7 @@ public class TextManager : MonoBehaviour
 			outside.Stop();
 			textBG.enabled = false;
 			blackoutBehindUI.DOFade(0.0f,4.0f);
-			inside.DOFade(0.8f, 4.0f);
+			inside.DOFade(0.6f, 4.0f);
 			debugMenu.SetActive(true);
 			blackoutAll.DOFade(0.0f,0.0f);
 			break;
