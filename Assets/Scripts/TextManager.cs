@@ -58,7 +58,8 @@ public class TextManager : MonoBehaviour
 		switch (textIndex)
 		{
 		case 1:
-			nameBox.SetText("Katherine");
+				tfManager.ActivateBlink(true);
+            nameBox.SetText("Katherine");
 			textBox.SetText("Would you be a dear and put some fresh hay in the empty stall while I'm out?");
 			break;
 		case 2:
@@ -89,7 +90,10 @@ public class TextManager : MonoBehaviour
 			nextDelay = 4.0f;
 			break;
 		case 4:
-			//dizzy camera effects of some sort?
+				//dizzy camera effects of some sort?
+				tfManager.blinksTillReset = 5;
+				tfManager.blinkTime = 0.8f;
+				tfManager.defaultNextBlink = 0.6f;
 			textBox.SetText("<wiggle a=0.3 f=0.4>Woaaah....</wiggle><br>Why am I suddenly so dizzy?<br>I really need to sit down for a bit.");
 			blackoutBehindUI.DOFade(0.0f, 4.0f);
 			nextDelay = 0.0f;
@@ -137,13 +141,19 @@ public class TextManager : MonoBehaviour
 			textBox.DOFade(1.0f, 2.0f);
 			textBG.DOFade(1.0f, 2.0f);
 			nameBox.DOFade(1.0f, 2.0f);
-			nameToChange = "Anna";
+                tfManager.blinksTillReset = 3;
+                tfManager.blinkTime = 0.8f;
+                tfManager.defaultNextBlink = 5.0f;
+                nameToChange = "Anna";
 			textToChange = "...was I wearing a deer headband?<br>I can't quite remember.";
 			Invoke("TextSet", 2.0f);
 			nextDelay = 0.0f;
 			break;
 		case 11:
-			textBox.SetText("The warmth is spreading. <br>Honestly though, it feels rather pleasant, like a blanket slowly enveloping my whole body.");
+                tfManager.blinksTillReset = 4;
+                tfManager.blinkTime = 0.16f;
+                tfManager.defaultNextBlink = 4.0f;
+                textBox.SetText("The warmth is spreading. <br>Honestly though, it feels rather pleasant, like a blanket slowly enveloping my whole body.");
 			nextDelay = 9.0f;
 			break;
 		case 12:
@@ -153,7 +163,8 @@ public class TextManager : MonoBehaviour
 			textBG.DOFade(0.0f, 2.0f);
 			nameBox.DOFade(0.0f, 2.0f);
 			tfManager.playBoneAnim(2);
-			tfManager.resetAndGo(1.0f,0.0f,5.5f, 9.0f);
+                tfManager.nextBlink = 9.1f;
+                tfManager.resetAndGo(1.0f,0.0f,5.5f, 9.0f);
 			nextDelay = 2.5f;
 			break;
 		case 13:
@@ -162,7 +173,10 @@ public class TextManager : MonoBehaviour
 			textBox.DOFade(1.0f, 2.0f);
 			textBG.DOFade(1.0f, 2.0f);
 			nameBox.DOFade(1.0f, 2.0f);
-			nameToChange = "Anna";
+                tfManager.blinksTillReset = 5;
+                tfManager.blinkTime = 1.0f;
+                tfManager.defaultNextBlink = 6.6f;
+                nameToChange = "Anna";
 			textToChange = "<pend>Mmmm</pend>, definitely a nice change of pace from the winter weather.<br>I could just bask in this feeling forever.";
 			Invoke("TextSet", 2.0f);
 			nextDelay = 0.0f;
@@ -172,9 +186,13 @@ public class TextManager : MonoBehaviour
 			nextDelay = 5.0f;
 			break;
 		case 15:
-			tfManager.resetAndGo(2.0f,-0.0f,2.0f, 5.0f);
-			//fade out shoes
-			textBox.SetText("Oh no, how was I unable to see it before? The mirror... my reflection!<br>I'm becoming a <shake>deer!</shake>");
+				tfManager.nextBlink = 5.1f;
+			tfManager.resetAndGo(2.0f,-0.0f,2.0f, 5.0f, false);
+                tfManager.blinksTillReset = 3;
+                tfManager.blinkTime = 0.08f;
+                tfManager.defaultNextBlink = 0.3f;
+                //fade out shoes
+                textBox.SetText("Oh no, how was I unable to see it before? The mirror... my reflection!<br>I'm becoming a <shake>deer!</shake>");
 			nextDelay = 0.0f;
 			break;
 		case 16:
@@ -207,7 +225,10 @@ public class TextManager : MonoBehaviour
 			nextDelay = 0.0f;
 			break;
 		case 20:
-			nameBox.SetText("Anna");
+                tfManager.blinksTillReset = 3;
+                tfManager.blinkTime = 0.07f;
+                tfManager.defaultNextBlink = 0.3f;
+                nameBox.SetText("Anna");
 			textBox.SetText("Kathy's back! I don't know how I'm going to explain this, but I have to at least hope she'll be able to get me out of this chair.");
 			nextDelay = 0.0f;
 			break;
@@ -245,8 +266,11 @@ public class TextManager : MonoBehaviour
 			textBox.SetText("She doesn't recognize me at all!");
 			break;
 		case 27:
-			//door sfx
-			nameBox.SetText("Anna");
+                //door sfx
+                tfManager.blinksTillReset = 3;
+                tfManager.blinkTime = 0.08f;
+                tfManager.defaultNextBlink = 0.5f;
+                nameBox.SetText("Anna");
 			textBox.SetText("...oh deer.");
 			nextDelay = 4.0f;
 			break;
@@ -268,7 +292,7 @@ public class TextManager : MonoBehaviour
 			textToChange =  "";
 			nameToChange =  "";
 			parade.PlayDelayed(6);
-			parade.volume = 0.6f;
+			parade.volume = 0.4f;
 			inside.DOFade(0.0f, 5.0f);
 			Invoke("TextSet", 6);
 			textBG.enabled = false;

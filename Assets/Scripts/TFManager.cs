@@ -16,14 +16,51 @@ public class TFManager : MonoBehaviour
  [SerializeField] Animator anim;
  [SerializeField]
  private Vector3 muzzStart, muzzEnd;
+	[SerializeField]
+	public float lastFaceStage, timeSinceBlink, nextBlink, blinkTime, defaultNextBlink;
+    [SerializeField]
+    public int blinksTillReset;
+    [SerializeField]
+    private bool blinkOnOff;
     void Start()
     {
 	    bodyRenderer = bodyObj.GetComponent<Renderer>();
 	    faceRenderer = faceObj.GetComponent<Renderer>();
 	    anim2.DOScale(muzzStart, 0.0f);
     }
+    private void Update()
+    {
+		if (blinkOnOff == true) {
+            timeSinceBlink += Time.deltaTime;
+            if (timeSinceBlink > nextBlink)
+            {
+                changeFaceState(lastFaceStage * 2.0f + 4.0f); //closed version
+                timeSinceBlink = 0.0f;
+                nextBlink = defaultNextBlink + Random.Range(0.0f, 1.0f);
+                blinksTillReset -= 1;
+                if (blinksTillReset <= 0)
+                {
+                    blinkTime = 0.08f;
+                    defaultNextBlink = 3.0f;
+                    blinksTillReset = 100;
+                }
+            }
+            else if (timeSinceBlink > blinkTime * 2.0f)
+            {
+                changeFaceState(lastFaceStage); //open eyes
+            }
+            else if (timeSinceBlink < blinkTime * 2.0f && timeSinceBlink > blinkTime)
+            {
+                changeFaceState(lastFaceStage * 2.0f + 3.0f); //half-open eyes
+            }
+            else if (nextBlink - timeSinceBlink < blinkTime)
+            {
+                changeFaceState(lastFaceStage * 2.0f + 3.0f); //half-open eyes
+            }
+        }
+    }
 
-	public void changeBodyState(float stage)
+    public void changeBodyState(float stage)
 	{
 		bodyRenderer.sharedMaterial.SetFloat("_Index", stage);
 	}
@@ -32,17 +69,32 @@ public class TFManager : MonoBehaviour
 		faceRenderer.sharedMaterial.SetFloat("_Index", stage);
 	}
 	
-	public void transition(float time, float target)
+	public void transition(float time, float target, bool includeFace = true)
 	{
 		bodyRenderer.sharedMaterial.DOFloat(target, "_Percent", time);
-		faceRenderer.sharedMaterial.DOFloat(target, "_Percent", time);
+		if (includeFace)
+		{
+			faceRenderer.sharedMaterial.DOFloat(target, "_Percent", time);
+		}
 	}
 	
 	public void setPercent(float target)
 	{
 		bodyRenderer.sharedMaterial.SetFloat("_Percent", target);
-		faceRenderer.sharedMaterial.SetFloat("_Percent", target);
+		if (lastFaceStage < 1.1)
+		{
+            faceRenderer.sharedMaterial.SetFloat("_Percent", target);
+        } else
+		{
+            faceRenderer.sharedMaterial.SetFloat("_Percent", -2.0f);
+        }
 	}
+
+	public void ActivateBlink(bool truefalse)
+	{
+		blinkOnOff = truefalse;
+
+    }
 	
 	public void playBoneAnim(int which)
 	{
@@ -73,11 +125,12 @@ public class TFManager : MonoBehaviour
 		}
 	}
 	
-	public void resetAndGo(float stage, float initial, float target, float time)
+	public void resetAndGo(float stage, float initial, float target, float time, bool includeFace = true)
 	{
 		setPercent(initial);
 		changeBodyState(stage);
-		changeFaceState(stage);
-		transition(time, target);
+        lastFaceStage = Mathf.Min(stage, 2.0f);
+        changeFaceState(lastFaceStage);
+		transition(time, target, includeFace);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using Unity.Cinemachine;
 
 /// <summary>
 /// A simple FPP (First Person Perspective) camera rotation script.
@@ -12,9 +13,7 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 		set { sensitivity = value; }
 	}
 	[Range(0.1f, 9f)][SerializeField] float sensitivity = 2f;
-	[Tooltip("Limits vertical camera rotation. Prevents the flipping that happens when rotation goes above 90.")]
 	[Range(0f, 90f)][SerializeField] float yRotationLimit = 88f;
-	[Tooltip("Limits vertical camera rotation. Prevents the flipping that happens when rotation goes above 90.")]
 	[Range(0f, 190f)][SerializeField] float xRotationLimit = 88f;
 
 	Vector2 rotation = Vector2.zero;
@@ -25,7 +24,7 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 	[SerializeField] float fovNormal = 60.0f;
 	[SerializeField] float fovZoomed = 15.0f;
 	[SerializeField] float zoomSpeed = 1.5f;
-	[SerializeField] Camera cam;
+	[SerializeField] CinemachineCamera cam;
  
 	void Update(){
 		if(!Input.GetKey(KeyCode.M))
@@ -43,14 +42,16 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 		if (Input.GetMouseButton(1)|Input.GetKey(KeyCode.Space)){
 			if (zoomed == false){
 				zoomed = true;
-				cam.DOFieldOfView(fovZoomed, zoomSpeed).SetEase(Ease.OutSine);
+				DOTween.To(()=> cam.Lens.FieldOfView, x=> cam.Lens.FieldOfView = x, fovZoomed, zoomSpeed).SetEase(Ease.OutSine);
+				//cam.DOFieldOfView(fovZoomed, zoomSpeed).SetEase(Ease.OutSine);
 			}
 		}
 		else
 		{
 			if (zoomed == true){
 				zoomed = false;
-				cam.DOFieldOfView(fovNormal, zoomSpeed);
+				DOTween.To(()=> cam.Lens.FieldOfView, x=> cam.Lens.FieldOfView = x, fovNormal, zoomSpeed).SetEase(Ease.OutSine);
+				//cam.DOFieldOfView(fovNormal, zoomSpeed);
 			}
 		}
 	}
