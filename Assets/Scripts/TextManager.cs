@@ -65,7 +65,9 @@ public class TextManager : MonoBehaviour
 		case 2:
 			nameBox.SetText("Anna");
 			textBox.SetText("Sure, I'll get right on that.");
-			nextDelay = 9.0f;
+                tfManager.resetAndGo(0.0f, 0.0f, -2.0f, 2.0f);
+				tfManager.playBoneAnim(3);
+                nextDelay = 9.0f;
 			break;
 		case 3:
 			textBox.SetText("");
@@ -75,9 +77,9 @@ public class TextManager : MonoBehaviour
 			Invoke("TextSet", 9);
 			inside.Play();
 			outside.DOFade(0.0f, 4.0f);
-			inside.DOFade(0.7f, 4.0f);
+			inside.DOFade(0.5f, 4.0f);
 			//play door creak sfx
-			door.volume = 0.6f;
+			door.volume = 0.5f;
 			door.PlayDelayed(6);
 			Sequence mySequence = DOTween.Sequence();
 			mySequence.Append(blackoutAll.DOFade(1.0f, 4.0f));
@@ -163,8 +165,11 @@ public class TextManager : MonoBehaviour
 			textBG.DOFade(0.0f, 2.0f);
 			nameBox.DOFade(0.0f, 2.0f);
 			tfManager.playBoneAnim(2);
-                tfManager.nextBlink = 9.1f;
-                tfManager.resetAndGo(1.0f,0.0f,5.5f, 9.0f);
+                tfManager.blinksTillReset = 1;
+                tfManager.defaultNextBlink = 9.1f;
+				tfManager.nextBlink = 9.4f;
+				tfManager.timeSinceBlink = 0.0f;
+                tfManager.resetAndGo(1.0f,0.0f,5.5f, 9.0f); //here's where the weird bodged together bit in TFManager comes into play
 			nextDelay = 2.5f;
 			break;
 		case 13:
@@ -174,7 +179,7 @@ public class TextManager : MonoBehaviour
 			textBG.DOFade(1.0f, 2.0f);
 			nameBox.DOFade(1.0f, 2.0f);
                 tfManager.blinksTillReset = 5;
-                tfManager.blinkTime = 1.0f;
+                tfManager.blinkTime = 0.8f;
                 tfManager.defaultNextBlink = 6.6f;
                 nameToChange = "Anna";
 			textToChange = "<pend>Mmmm</pend>, definitely a nice change of pace from the winter weather.<br>I could just bask in this feeling forever.";
@@ -291,8 +296,8 @@ public class TextManager : MonoBehaviour
 		case 30:
 			textToChange =  "";
 			nameToChange =  "";
-			parade.PlayDelayed(6);
-			parade.volume = 0.4f;
+                parade.volume = 0.4f;
+                parade.PlayDelayed(6);
 			inside.DOFade(0.0f, 5.0f);
 			Invoke("TextSet", 6);
 			textBG.enabled = false;

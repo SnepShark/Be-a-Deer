@@ -118,13 +118,13 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Gradient: 0.7
-    - _Index: 1
+    - _Index: 0
     - _InvertDirection: 2.74
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _Percent: 5.5
+    - _Percent: 8
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using Unity.Cinemachine;
+using Fragilem17.MirrorsAndPortals;
 
 /// <summary>
 /// A simple FPP (First Person Perspective) camera rotation script.
@@ -25,6 +26,9 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 	[SerializeField] float fovZoomed = 15.0f;
 	[SerializeField] float zoomSpeed = 1.5f;
 	[SerializeField] CinemachineCamera cam;
+
+	[SerializeField] private int quality = 0;
+	[SerializeField] private MirrorRenderer mirrorRenderer;
  
 	void Update(){
 		if(!Input.GetKey(KeyCode.M))
@@ -54,5 +58,33 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 				//cam.DOFieldOfView(fovNormal, zoomSpeed);
 			}
 		}
+
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+            QualitySettings.SetQualityLevel(quality);
+			switch (quality)
+			{
+                case 0:
+                    mirrorRenderer.screenScaleFactor = 1.0f;
+                    QualitySettings.SetQualityLevel(1);
+                    quality = 1;
+                    break;
+                case 1:
+                    mirrorRenderer.screenScaleFactor = 0.5f;
+                    QualitySettings.SetQualityLevel(1);
+                    quality = 0;
+                    break;
+                case 2:
+					mirrorRenderer.screenScaleFactor = 1.0f;
+					QualitySettings.SetQualityLevel(0);
+					quality = 3;
+					break;
+				case 3:
+					mirrorRenderer.screenScaleFactor = 0.5f;
+					QualitySettings.SetQualityLevel(0);
+					quality = 0;
+					break;
+			}
+        }
 	}
 }

@@ -23,7 +23,7 @@ public class CursorManager : MonoBehaviour
 		else if (Input.GetMouseButton(1) | Input.GetMouseButton(0))
 		{
 			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Confined;	
+			Cursor.lockState = CursorLockMode.Locked;	
 		}
 		//if (Input.GetKeyDown(KeyCode.Escape)){
 			//Application.Quit();

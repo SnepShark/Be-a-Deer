@@ -30,7 +30,15 @@ public class TFManager : MonoBehaviour
     }
     private void Update()
     {
-		if (blinkOnOff == true) {
+        if (timeSinceBlink > defaultNextBlink && defaultNextBlink > 9.0f) //totally bodged together lmao
+        {
+            setPercent(-2.0f);
+            lastFaceStage = 2.0f;
+            changeFaceState(lastFaceStage);
+			changeBodyState(2.0f);
+        }
+
+        if (blinkOnOff == true) {
             timeSinceBlink += Time.deltaTime;
             if (timeSinceBlink > nextBlink)
             {
@@ -98,7 +106,6 @@ public class TFManager : MonoBehaviour
 	
 	public void playBoneAnim(int which)
 	{
-		Debug.Log(which);
 		switch (which)
 		{
 			//ears
