@@ -13,13 +13,15 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 		get { return sensitivity; }
 		set { sensitivity = value; }
 	}
-	[Range(0.1f, 9f)][SerializeField] float sensitivity = 2f;
+	[Range(0.1f, 200f)][SerializeField] float sensitivity = 2f;
 	[Range(0f, 90f)][SerializeField] float yRotationLimit = 88f;
 	[Range(0f, 190f)][SerializeField] float xRotationLimit = 88f;
 
 	Vector2 rotation = Vector2.zero;
+	Vector2 prevRot = Vector2.zero;
 	const string xAxis = "Mouse X";
 	const string yAxis = "Mouse Y";
+
 	
 	private bool zoomed = false;
 	[SerializeField] float fovNormal = 60.0f;
@@ -29,19 +31,28 @@ public class FirstPersonCameraRotation : MonoBehaviour {
 
 	[SerializeField] private int quality = 0;
 	[SerializeField] private MirrorRenderer mirrorRenderer;
- 
-	void Update(){
-		if(!Input.GetKey(KeyCode.M))
-			{
-		rotation.x += Input.GetAxis(xAxis) * sensitivity;
-		rotation.y += Input.GetAxis(yAxis) * sensitivity;
-		rotation.x = Mathf.Clamp(rotation.x, -xRotationLimit, xRotationLimit);
-		rotation.y = Mathf.Clamp(rotation.y, -yRotationLimit, yRotationLimit);
-		var xQuat = Quaternion.AngleAxis(rotation.x, Vector3.up);
-		var yQuat = Quaternion.AngleAxis(rotation.y, Vector3.left);
+	[SerializeField] private float smoothTime = 0.2f;
+    [SerializeField] private Vector3 velocity = new Vector3(0, 0, 0);
 
-			transform.localRotation = xQuat * yQuat; //Quaternions seem to rotate more consistently than EulerAngles. Sensitivity seemed to change slightly at certain degrees using Euler. transform.localEulerAngles = new Vector3(-rotation.y, rotation.x, 0);
-			}
+    public static Quaternion SmoothDampQuaternion(Quaternion current, Quaternion target, ref Vector3 currentVelocity, float smoothTime)
+    {
+        Vector3 c = current.eulerAngles;
+        Vector3 t = target.eulerAngles;
+        return Quaternion.Euler(
+          Mathf.SmoothDampAngle(c.x, t.x, ref currentVelocity.x, smoothTime),
+          Mathf.SmoothDampAngle(c.y, t.y, ref currentVelocity.y, smoothTime),
+          Mathf.SmoothDampAngle(c.z, t.z, ref currentVelocity.z, smoothTime)
+        );
+    }
+
+    void Update(){
+		if(!Input.GetKey(KeyCode.M))
+		{
+			prevRot = rotation;
+			rotation.x = Mathf.Clamp(rotation.x + Input.GetAxis(xAxis) * sensitivity, -xRotationLimit, xRotationLimit);
+			rotation.y = Mathf.Clamp(rotation.y + Input.GetAxis(yAxis) * sensitivity, -yRotationLimit, yRotationLimit);
+            transform.localRotation = SmoothDampQuaternion(Quaternion.AngleAxis(prevRot.x, Vector3.up) * Quaternion.AngleAxis(prevRot.y, Vector3.left), Quaternion.AngleAxis(rotation.x, Vector3.up) * Quaternion.AngleAxis(rotation.y, Vector3.left), ref velocity, smoothTime);
+		}
 		
 		if (Input.GetMouseButton(1)|Input.GetKey(KeyCode.Space)){
 			if (zoomed == false){

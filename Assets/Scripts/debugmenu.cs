@@ -12,8 +12,9 @@ public class debugmenu : MonoBehaviour
     {
 	    stageSlider.onValueChanged.AddListener((v) => {
 		    manager.changeBodyState(v);
-		    manager.lastFaceStage = Mathf.Min(v,2.0f);
-			percentSlider.value = -2;
+            percentSlider.value = -2.0f;
+			manager.changeFaceState(Mathf.Min(v, 2.0f));
+            manager.lastFaceStage = Mathf.Min(v,2.0f);
 	    });
 	    percentSlider.onValueChanged.AddListener((v) => {
 		    manager.setPercent(v);

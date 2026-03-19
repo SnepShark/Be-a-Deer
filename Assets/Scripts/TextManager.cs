@@ -59,14 +59,14 @@ public class TextManager : MonoBehaviour
 		{
 		case 1:
 				tfManager.ActivateBlink(true);
-            nameBox.SetText("Katherine");
+                tfManager.resetAndGo(0.0f, 0.0f, -2.0f, 2.0f);
+                tfManager.playBoneAnim(3);
+                nameBox.SetText("Katherine");
 			textBox.SetText("Would you be a dear and put some fresh hay in the empty stall while I'm out?");
 			break;
 		case 2:
 			nameBox.SetText("Anna");
 			textBox.SetText("Sure, I'll get right on that.");
-                tfManager.resetAndGo(0.0f, 0.0f, -2.0f, 2.0f);
-				tfManager.playBoneAnim(3);
                 nextDelay = 9.0f;
 			break;
 		case 3:
@@ -178,16 +178,19 @@ public class TextManager : MonoBehaviour
 			textBox.DOFade(1.0f, 2.0f);
 			textBG.DOFade(1.0f, 2.0f);
 			nameBox.DOFade(1.0f, 2.0f);
-                tfManager.blinksTillReset = 5;
+                tfManager.blinksTillReset = 6;
                 tfManager.blinkTime = 0.8f;
-                tfManager.defaultNextBlink = 6.6f;
+                tfManager.defaultNextBlink = 1.2f;
                 nameToChange = "Anna";
 			textToChange = "<pend>Mmmm</pend>, definitely a nice change of pace from the winter weather.<br>I could just bask in this feeling forever.";
 			Invoke("TextSet", 2.0f);
 			nextDelay = 0.0f;
 			break;
 		case 14:
-			textBox.SetText("...I just can't stop feeling like something's off though.");
+                tfManager.blinksTillReset = 1;
+                tfManager.blinkTime = 0.16f;
+                tfManager.defaultNextBlink = 3.0f;
+                textBox.SetText("...I just can't stop feeling like something's off though.");
 			nextDelay = 5.0f;
 			break;
 		case 15:

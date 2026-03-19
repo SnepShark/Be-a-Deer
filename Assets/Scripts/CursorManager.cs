@@ -26,7 +26,7 @@ public class CursorManager : MonoBehaviour
 			Cursor.lockState = CursorLockMode.Locked;	
 		}
 		//if (Input.GetKeyDown(KeyCode.Escape)){
-			//Application.Quit();
+		//	Application.Quit();
 		//}
 		if (Input.GetKeyDown(KeyCode.N))
 		{
